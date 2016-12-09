@@ -4,8 +4,11 @@ import xbox
 import PiIO
 import time
 
+#Motor pin IDs
 LEFT_MOTORS = 1
 RIGHT_MOTORS = 0
+#The time to activate relays for cannon firing.
+FIRE_TIME = 25
 
 j = xbox.Joystick()
 motors = maestro.Controller()
@@ -18,16 +21,15 @@ rightLaunch = time.millis()
 while True:
     drive.drive(j.leftX(), j.leftY())
 
-    #Add rising edge for triggers
     if j.whenRightTrigger() and rightLaunch < time.millis():
-        rightLaunch = time.millis() + 500
+        rightLaunch = time.millis() + FIRE_TIME
     if time.millis() < rightLaunch:
         cannons.left(True)
     else:
         cannons.left(False)
 
     if j.whenLeftTrigger() and leftLaunch < time.millis():
-        leftLaunch = time.millis() + 500
+        leftLaunch = time.millis() + FIRE_TIME
     if time.millis() < leftLaunch:
         cannons.right(True)
     else:
